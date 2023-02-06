@@ -1,22 +1,20 @@
-"""Docstring for this module"""
+"""Docstring"""
 from pyspark.sql import SparkSession
 
 
-spark = SparkSession.builder.appName('My first spark experience').getOrCreate()
+COUNTRIES = ['United Kingdom', 'Netherlands']
+spark = SparkSession.builder.appName('codac').getOrCreate()
 
 personal_data = spark.read.csv(
     '/mnt/c/Users/marwisni/Downloads/codac_assignment_2023/dataset_one.csv', header=True)
-print(type(personal_data))
-personal_data.show(5)
+personal_data = personal_data.select('id','email','country')
 
 financial_data = spark.read.csv(
     '/mnt/c/Users/marwisni/Downloads/codac_assignment_2023/dataset_two.csv', header=True)
-print(type(financial_data))
-financial_data.show(5)
+financial_data = financial_data.drop('cc_n')
 
 joined_data = personal_data.join(financial_data, ['id'])
-for column in joined_data.columns:
-    print(column)
+joined_data = joined_data.filter(joined_data.country.isin(COUNTRIES))
 joined_data.show(30)
-joined_data.write.csv(
+joined_data.write.mode('overwrite').csv(
     '/mnt/c/Users/marwisni/Downloads/codac_assignment_2023/joined_data.csv', header=True)

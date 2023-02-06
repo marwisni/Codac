@@ -17,7 +17,7 @@ User needs to provide two csv files:
 2) Second with financial details:  
        a)  id  
        b)  btc_a (bitcoin address)  
-       c)  cc_t (credit card type)
+       c)  cc_t (credit card type)  
        d)  cc_n (credit card number)
 
 ## Output (result)
@@ -32,4 +32,4 @@ As the result of application work user will get one csv file with joined data fr
 
 ## Run
 To run application just type in terminal:  
-python3 codac.py *personal_data_file_name.csv* *financial_data_file_name.csv* country_1, country_2, ..., country_n
+python3 codac.py *'personal_data_file_name.csv'* *'financial_data_file_name.csv'* *'country_1'*, *'country_2'*, ..., *'country_n'*

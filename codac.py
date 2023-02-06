@@ -15,6 +15,7 @@ financial_data = financial_data.drop('cc_n')
 
 joined_data = personal_data.join(financial_data, ['id'])
 joined_data = joined_data.filter(joined_data.country.isin(COUNTRIES))
+changing_expression = ["id as client_identifier", "email", "country", "btc_a as bitcoin_address", "cc_t as credit_card_type"]
+joined_data = joined_data.selectExpr(changing_expression)
 joined_data.show(30)
-joined_data.write.mode('overwrite').csv(
-    '/mnt/c/Users/marwisni/Downloads/codac_assignment_2023/joined_data.csv', header=True)
+joined_data.write.csv('./client_data', header=True, mode='overwrite')    

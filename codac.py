@@ -39,7 +39,7 @@ def country_filter(dataframe, countries_str: str):
 if len(sys.argv) > 3:
     joined_data = country_filter(joined_data, sys.argv[3])
 else:
-    joined_data = country_filter(joined_data, '')
+    joined_data = country_filter(joined_data, 'United Kingdom, Netherlands')
 
 changes = {
     'id': 'client_identifier',
@@ -54,7 +54,7 @@ def column_rename(dataframe, change: dict):
             changes_list.append(f"{column} as {change[column]}")
         else:
             changes_list.append(column)
-    logging.info("Columns' names have been changed successfully.")    
+    logging.info("Columns' names have been changed successfully.")
     return dataframe.selectExpr(changes_list)
 
 

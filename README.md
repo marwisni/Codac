@@ -32,4 +32,10 @@ As the result of application work user will get one csv file with joined data fr
 
 ## Run
 To run application just type in terminal:  
-python3 codac.py *'personal_data_file_name.csv'* *'financial_data_file_name.csv'* *'country_1'*, *'country_2'*, ..., *'country_n'*
+python3 codac.py *'personal_data_file_name.csv'* *'financial_data_file_name.csv'* *'country_1, country_2, ..., country_n'*  
+where:  
+- python3 is standard python command to run python3 script
+- codac.py is name of python script to run
+- *'personal_data_file_name.csv'* is path to csv file contains clients personal data
+- *'financial_data_file_name.csv'* is path to csv file contains clients financial data
+- 'country_1, country_2, ..., country_n' is string with list of countries' names (comma separated) which user prefer to filter

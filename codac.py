@@ -13,7 +13,7 @@ logging.info('Spark session has started')
 if len(sys.argv) > 1:
     personal_data = spark.read.csv(sys.argv[1], header=True)
 else:
-    personal_data = spark.read.csv('/mnt/c/Users/marwisni/Downloads/codac_assignment_2023/dataset_one.csv', header=True)
+    personal_data = spark.read.csv('./source_data/dataset_one.csv', header=True)
 logging.info('Personal data has been imported successfully.')
 personal_data = personal_data.select('id', 'email', 'country')
 logging.info('Personal data has been filtered successfully.')
@@ -21,7 +21,7 @@ logging.info('Personal data has been filtered successfully.')
 if len(sys.argv) > 2:
     financial_data = spark.read.csv(sys.argv[2], header=True)
 else:
-    financial_data = spark.read.csv('/mnt/c/Users/marwisni/Downloads/codac_assignment_2023/dataset_two.csv', header=True)
+    financial_data = spark.read.csv('./source_data/dataset_two.csv', header=True)
 logging.info('Financial data has been imported successfully.')
 financial_data = financial_data.drop('cc_n')
 logging.info('Financial data has been filtered successfully.')

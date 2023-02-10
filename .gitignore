@@ -1,3 +1,7 @@
 exercise.md
 client_data/
 Codac.code-workspace
+logs/
+.vscode/
+.pytest_cache/
+_pyche_/

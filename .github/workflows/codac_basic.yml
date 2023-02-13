@@ -21,6 +21,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         set-safe-directory: '/home/runner/work/Codac/'
+        path: '..'
     - name: Set up Python 3.7
       uses: actions/setup-python@v3
       with:

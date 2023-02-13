@@ -1,7 +1,10 @@
 exercise.md
-client_data/
+codac/client_data/
 Codac.code-workspace
-logs/**
+codac/logs/**
 .vscode/
 .pytest_cache/
 _pyche_/
+build/
+Codac.egg-info/
+dist/

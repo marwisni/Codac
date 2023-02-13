@@ -5,6 +5,6 @@ src/logs/**
 .vscode/
 src/__pycache__
 build/
-Codac.egg-info/
+*.egg-info/
 dist/
 src/venv/

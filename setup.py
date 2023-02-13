@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='Codac',
+    name='Warka',
     version='1.0',
     packages=['src'],
 )

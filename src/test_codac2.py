@@ -1,15 +1,14 @@
 """Docstring for module, TODO Maybe add more tests?"""
 import chispa
 from pyspark.sql import SparkSession
-import codac
+from src import codac
 
 spark = SparkSession.builder.appName('test_codac').getOrCreate()
-
 
 def test_column_rename():
     """Testing column_rename happy path"""
     data = [('abc', 'abc', 'abc', 'abc', 'abc')]
-    source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])    
+    source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
     actual_df = codac.column_rename(source_df, {
         'a': 'f',
         'c': 'g',
@@ -32,4 +31,3 @@ def test_country_filter():
                      ('col_1@country_5', 'col_2@country_5', 'country_5', 'col_4@country_5', 'col_5@country_5')]
     expected_df = spark.createDataFrame(expected_data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
     chispa.assert_df_equality(actual_df, expected_df)
-    

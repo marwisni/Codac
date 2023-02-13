@@ -3,5 +3,5 @@ from setuptools import setup
 setup(
     name='Codac',
     version='1.0',
-    packages=['.codac'],
+    packages=['src'],
 )

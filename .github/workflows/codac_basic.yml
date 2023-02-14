@@ -40,6 +40,9 @@ jobs:
       run: |
         ls
         pwd
+        cd src
+        ls
+        pwd
     - name: Test with pytest
       run: |
         pytest -m pytest

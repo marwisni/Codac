@@ -39,5 +39,5 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
-    - name: Build wheel:
+    - name: Build wheel
     -   python setup.py bdist_wheel                  

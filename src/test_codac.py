@@ -8,7 +8,7 @@ spark = SparkSession.builder.appName('test_codac').getOrCreate()
 
 
 def test_column_rename():
-    """Testing column_rename happy path"""
+    """Testing column_rename happy path"""    
     data = [('abc', 'abc', 'abc', 'abc', 'abc')]
     source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
     actual_df = codac.column_rename(source_df, {

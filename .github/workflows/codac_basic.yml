@@ -47,7 +47,7 @@ jobs:
         ls        
     - name: Test with pytest
       run: |
-        pytest -m pytest
+        pytest
     - name: Check dirs2
       run: |
         ls

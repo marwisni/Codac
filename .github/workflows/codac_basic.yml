@@ -39,6 +39,7 @@ jobs:
     - name: Check dirs
       run: |
         ls
+        pwd
     - name: Test with pytest
       run: |
         pytest -m pytest

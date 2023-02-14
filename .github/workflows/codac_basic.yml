@@ -43,6 +43,15 @@ jobs:
         cd src
         ls
         pwd
+        cd..        
     - name: Test with pytest
       run: |
         pytest -m pytest
+    - name: Check dirs2
+      run: |
+        ls
+        pwd
+        cd src
+        ls
+        pwd
+        cd..        

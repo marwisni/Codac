@@ -9,7 +9,7 @@ logger = logging.getLogger('codac.py')
 logger.setLevel(logging.INFO)
 logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 logger_file_handler = RotatingFileHandler(
-    "./logs/status.log", maxBytes=1024, backupCount=3, encoding='utf8')
+    "logs/status.log", maxBytes=1024, backupCount=3, encoding='utf8')
 logger_file_handler.setFormatter(logger_formatter)
 logger.addHandler(logger_file_handler)
 
@@ -20,7 +20,7 @@ if len(sys.argv) > 1:
     personal_data = spark.read.csv(sys.argv[1], header=True)
 else:
     personal_data = spark.read.csv(
-        './source_data/dataset_one.csv', header=True)
+        'src/source_data/dataset_one.csv', header=True)
 logger.info('Personal data has been imported successfully.')
 personal_data = personal_data.select('id', 'email', 'country')
 logger.info('Personal data has been filtered successfully.')
@@ -29,7 +29,7 @@ if len(sys.argv) > 2:
     financial_data = spark.read.csv(sys.argv[2], header=True)
 else:
     financial_data = spark.read.csv(
-        './source_data/dataset_two.csv', header=True)
+        'src/source_data/dataset_two.csv', header=True)
 logger.info('Financial data has been imported successfully.')
 financial_data = financial_data.drop('cc_n')
 logger.info('Financial data has been filtered successfully.')
@@ -70,6 +70,6 @@ def column_rename(dataframe, change: dict):
 
 
 joined_data = column_rename(joined_data, changes)
-joined_data.write.csv('./client_data', header=True, mode='overwrite')
+joined_data.write.csv('src/client_data', header=True, mode='overwrite')
 logger.info("Output file has been saved successfully.")
 spark.stop()

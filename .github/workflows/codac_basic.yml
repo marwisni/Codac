@@ -43,7 +43,8 @@ jobs:
         cd src
         ls
         pwd
-        cd ..        
+        cd ..
+        ls        
     - name: Test with pytest
       run: |
         pytest -m pytest
@@ -54,4 +55,5 @@ jobs:
         cd src
         ls
         pwd
-        cd ..        
+        cd ..
+        ls      

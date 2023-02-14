@@ -9,7 +9,7 @@ logger = logging.getLogger('codac.py')
 logger.setLevel(logging.INFO)
 logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 logger_file_handler = RotatingFileHandler(
-    "src/logs/status.log", maxBytes=1024, backupCount=3, encoding='utf8')
+    "logs/status.log", maxBytes=1024, backupCount=3, encoding='utf8')
 logger_file_handler.setFormatter(logger_formatter)
 logger.addHandler(logger_file_handler)
 

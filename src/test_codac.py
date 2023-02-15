@@ -1,7 +1,7 @@
 """Docstring for module, TODO Maybe add more tests?"""
 import chispa
 from pyspark.sql import SparkSession
-from src import codac
+from data_joiner import codac
 
 
 spark = SparkSession.builder.appName('test_codac').getOrCreate()

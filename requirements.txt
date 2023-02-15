@@ -1,5 +1,6 @@
 setuptools 
 wheel
+check-wheel-contents
 pyspark
 chispa
 flake8 

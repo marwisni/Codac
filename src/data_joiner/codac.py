@@ -2,6 +2,7 @@
 import sys
 import logging
 import pathlib
+from argparse import ArgumentParser
 from logging.handlers import RotatingFileHandler
 from pyspark.sql import SparkSession
 
@@ -18,23 +19,28 @@ def logger_init(level, path, max_bytes, backup_count):
     return logger
 
 logger = logger_init(level=logging.INFO,
-                     path="logs/status.log",
+                     path=pathlib.Path(__file__).parents[2].joinpath('logs/status.log'),
                      max_bytes=1024,
                      backup_count=3)
+
+parser = ArgumentParser()
+parser.add_argument('source', nargs='*', default=[
+    'src/source_data/dataset_one.csv',
+    'src/source_data/dataset_two.csv'],
+    help='Needs two sources .csv files. First is for personal data and second for financial data.')
+parser.add_argument('-c', '--country', default='United Kingdom, Netherlands',
+                    help='Countries that should be included in output files. Empty list return all available countries')
+args = parser.parse_args()
+parser.print_help()
+print(args.source[0])
+print(args.source[1])
+print(args.country)
 spark = SparkSession.builder.appName('codac').getOrCreate()
 logger.info('Spark session has started')
 
-if len(sys.argv) > 1:
-    personal_data = spark.read.csv(sys.argv[1], header=True)
-else:
-    personal_data = spark.read.csv(
-        'src/source_data/dataset_one.csv', header=True)
+personal_data = spark.read.csv(args.source[0], header=True)
 logger.info('Personal data has been imported successfully.')
-if len(sys.argv) > 2:
-    financial_data = spark.read.csv(sys.argv[2], header=True)
-else:
-    financial_data = spark.read.csv(
-        'src/source_data/dataset_two.csv', header=True)
+financial_data = spark.read.csv(args.source[1], header=True)
 logger.info('Financial data has been imported successfully.')
 
 personal_data = personal_data.select('id', 'email', 'country')
@@ -49,15 +55,15 @@ logger.info('Personal and financial data has been joined together successfully.'
 
 def country_filter(dataframe, countries_str: str):
     """TODO Docstring for function"""
-    countries = [country.strip() for country in countries_str.split(',')]
-    logger.info('Data has been filtered by country successfully.')
-    return dataframe.filter(dataframe.country.isin(countries))
+    if countries_str == '':
+        return dataframe
+    else:
+        countries = [country.strip() for country in countries_str.split(',')]    
+        return dataframe.filter(dataframe.country.isin(countries))
 
 
-if len(sys.argv) > 3:
-    joined_data = country_filter(joined_data, sys.argv[3])
-else:
-    joined_data = country_filter(joined_data, 'United Kingdom, Netherlands')
+joined_data = country_filter(joined_data, args.country)
+logger.info('Data has been filtered by country successfully.')
 
 changes = {
     'id': 'client_identifier',

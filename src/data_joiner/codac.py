@@ -1,9 +1,12 @@
 import logging
-# import pathlib
 from argparse import ArgumentParser
 from logging.handlers import RotatingFileHandler
 from pyspark.sql import SparkSession
-import config
+try:
+    import config
+except ModuleNotFoundError as e:
+    from data_joiner import config
+
 
 
 def logger_init(level, path, max_bytes, backup_count):

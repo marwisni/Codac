@@ -1,36 +1,45 @@
 """Docstring for module"""
 import sys
 import logging
+import pathlib
 from logging.handlers import RotatingFileHandler
 from pyspark.sql import SparkSession
 
+def logger_init(level, path, max_bytes, backup_count):
+    """Docstring"""    
+    pathlib.Path(__file__).parents[1].joinpath('logs').mkdir(exist_ok=True)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(level)
+    logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
+    logger_file_handler = RotatingFileHandler(
+        path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf8')
+    logger_file_handler.setFormatter(logger_formatter)
+    logger.addHandler(logger_file_handler)
+    return logger
 
-logger = logging.getLogger('codac.py')
-logger.setLevel(logging.INFO)
-logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-logger_file_handler = RotatingFileHandler(
-    "logs/status.log", maxBytes=1024, backupCount=3, encoding='utf8')
-logger_file_handler.setFormatter(logger_formatter)
-logger.addHandler(logger_file_handler)
-
+logger = logger_init(level=logging.INFO,
+                     path="logs/status.log",
+                     max_bytes=1024,
+                     backup_count=3)
 spark = SparkSession.builder.appName('codac').getOrCreate()
-
 logger.info('Spark session has started')
+
 if len(sys.argv) > 1:
     personal_data = spark.read.csv(sys.argv[1], header=True)
 else:
     personal_data = spark.read.csv(
         'src/source_data/dataset_one.csv', header=True)
 logger.info('Personal data has been imported successfully.')
-personal_data = personal_data.select('id', 'email', 'country')
-logger.info('Personal data has been filtered successfully.')
-
 if len(sys.argv) > 2:
     financial_data = spark.read.csv(sys.argv[2], header=True)
 else:
     financial_data = spark.read.csv(
         'src/source_data/dataset_two.csv', header=True)
 logger.info('Financial data has been imported successfully.')
+
+personal_data = personal_data.select('id', 'email', 'country')
+logger.info('Personal data has been filtered successfully.')
+
 financial_data = financial_data.drop('cc_n')
 logger.info('Financial data has been filtered successfully.')
 

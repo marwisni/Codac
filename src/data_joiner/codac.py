@@ -1,40 +1,39 @@
-"""Docstring for module"""
-import sys
 import logging
 import pathlib
 from argparse import ArgumentParser
 from logging.handlers import RotatingFileHandler
 from pyspark.sql import SparkSession
 
+
 def logger_init(level, path, max_bytes, backup_count):
-    """Docstring"""    
     pathlib.Path(__file__).parents[1].joinpath('logs').mkdir(exist_ok=True)
     logger = logging.getLogger(__name__)
     logger.setLevel(level)
     logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-    logger_file_handler = RotatingFileHandler(
-        path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf8')
+    logger_file_handler = RotatingFileHandler(path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf8')
     logger_file_handler.setFormatter(logger_formatter)
     logger.addHandler(logger_file_handler)
     return logger
+
 
 logger = logger_init(level=logging.INFO,
                      path=pathlib.Path(__file__).parents[2].joinpath('logs/status.log'),
                      max_bytes=1024,
                      backup_count=3)
 
-parser = ArgumentParser()
-parser.add_argument('source', nargs='*', default=[
-    'src/source_data/dataset_one.csv',
-    'src/source_data/dataset_two.csv'],
-    help='Needs two sources .csv files. First is for personal data and second for financial data.')
-parser.add_argument('-c', '--country', default='United Kingdom, Netherlands',
-                    help='Countries that should be included in output files. Empty list return all available countries')
-args = parser.parse_args()
-parser.print_help()
-print(args.source[0])
-print(args.source[1])
-print(args.country)
+def get_args():
+    parser = ArgumentParser()
+    parser.add_argument('source',
+                        nargs='*',
+                        default=['src/source_data/dataset_one.csv', 'src/source_data/dataset_two.csv'],
+                        help='Needs two sources .csv files. First is for personal data and second for financial data.')
+    parser.add_argument('-c', '--country',
+                        default='United Kingdom, Netherlands',
+                        help='Countries that should be included in output files. Empty list return all available countries')
+    return parser.parse_args()
+
+args = get_args()
+
 spark = SparkSession.builder.appName('codac').getOrCreate()
 logger.info('Spark session has started')
 
@@ -54,11 +53,10 @@ logger.info('Personal and financial data has been joined together successfully.'
 
 
 def country_filter(dataframe, countries_str: str):
-    """TODO Docstring for function"""
     if countries_str == '':
         return dataframe
     else:
-        countries = [country.strip() for country in countries_str.split(',')]    
+        countries = [country.strip() for country in countries_str.split(',')]
         return dataframe.filter(dataframe.country.isin(countries))
 
 
@@ -73,7 +71,7 @@ changes = {
 
 
 def column_rename(dataframe, change: dict):
-    """TODO docstring for function, TODO Maybe should iterate by change not by colmns?"""
+    # TODO Maybe should iterate by change not by colmns?
     changes_list = []
     for column in dataframe.columns:
         if column in change.keys():

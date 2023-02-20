@@ -8,8 +8,8 @@ LOGS = {
 }
 
 SOURCES = {
-    'first': 'src/source_data/dataset_one.csv',
-    'second': 'src/source_data/dataset_two.csv',
+    'first': str(pathlib.Path(__file__).parents[1].joinpath('source_data/dataset_one.csv')),
+    'second': str(pathlib.Path(__file__).parents[1].joinpath('source_data/dataset_two.csv')),
     'countries': 'United Kingdom, Netherlands',
 }
 
@@ -18,3 +18,5 @@ CHANGES = {
     'btc_a': 'bitcoin_address',
     'cc_t':  'credit_card_type'
 }
+
+OUTPUT = str(pathlib.Path(__file__).parents[1].joinpath('client_data'))

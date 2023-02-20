@@ -41,7 +41,7 @@ args = get_args()
 spark = SparkSession.builder.appName('codac').getOrCreate()
 logger.info('Spark session has started')
 
-personal_data = spark.read.csv(args.source[0], header=True)
+personal_data = spark.read.csv(str(args.source[0]), header=True)
 logger.info('Personal data has been imported successfully.')
 financial_data = spark.read.csv(args.source[1], header=True)
 logger.info('Financial data has been imported successfully.')
@@ -79,8 +79,7 @@ def column_rename(dataframe, change: dict):
     logger.info("Columns' names have been changed successfully.")
     return dataframe.selectExpr(changes_list)
 
-
 joined_data = column_rename(joined_data, config.CHANGES)
-joined_data.write.csv('src/client_data', header=True, mode='overwrite')
+joined_data.write.csv(config.OUTPUT, header=True, mode='overwrite')
 logger.info("Output file has been saved successfully.")
 spark.stop()

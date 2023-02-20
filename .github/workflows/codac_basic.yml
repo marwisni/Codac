@@ -39,7 +39,6 @@ jobs:
     - name: Build wheel file
       run: |
         python setup.py bdist_wheel
-    - name: Check if wheel file exist
+    - name: Checking wheel file
       run: |
-        cd dist
-        ls
+        check-wheel-contents ./dist

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='Codac',
-    version='0.1',
+    version='0.2',
     author='Mariusz Wiśniowski',
     author_email='mariusz.wisniowski@capgemini.com',
     description='Codac assignment',

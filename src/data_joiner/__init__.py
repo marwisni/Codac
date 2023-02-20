@@ -1,6 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-import config
+from data_joiner import config
 
 def logger_init(level, path, max_bytes, backup_count):
     path.mkdir(exist_ok=True)

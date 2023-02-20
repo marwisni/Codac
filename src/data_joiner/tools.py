@@ -5,8 +5,9 @@ def column_rename(dataframe, change: dict):
         if column in change.keys():
             changes_list.append(f"{column} as {change[column]}")
         else:
-            changes_list.append(column)    
+            changes_list.append(column)
     return dataframe.selectExpr(changes_list)
+
 
 def country_filter(dataframe, countries_str: str):
     if countries_str == '':
@@ -14,3 +15,4 @@ def country_filter(dataframe, countries_str: str):
     else:
         countries = [country.strip() for country in countries_str.split(',')]
         return dataframe.filter(dataframe.country.isin(countries))
+    

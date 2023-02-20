@@ -31,9 +31,9 @@ def get_args():
 
 
 main_logger = logger_init(level=config.LOGS['level'],
-                     path=config.LOGS['path'],
-                     max_bytes=config.LOGS['maxBytes'],
-                     backup_count=config.LOGS['backupCount'])
+                          path=config.LOGS['path'],
+                          max_bytes=config.LOGS['maxBytes'],
+                          backup_count=config.LOGS['backupCount'])
 
 main_logger.info('Data joiner package has been initialized')
 

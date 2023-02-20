@@ -15,4 +15,3 @@ def country_filter(dataframe, countries_str: str):
     else:
         countries = [country.strip() for country in countries_str.split(',')]
         return dataframe.filter(dataframe.country.isin(countries))
-    

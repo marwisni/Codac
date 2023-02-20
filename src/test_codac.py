@@ -67,7 +67,7 @@ def test_country_filter_country_not_in_df():
             ('col_1@country_5', 'col_2@country_5', 'country_5', 'col_4@country_5', 'col_5@country_5')]
     source_df = spark.createDataFrame(data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
     actual_df = country_filter(source_df, 'country_2, country_6')
-    expected_data = [('col_1@country_2', 'col_2@country_2', 'country_2', 'col_4@country_2', 'col_5@country_2'),]
+    expected_data = [('col_1@country_2', 'col_2@country_2', 'country_2', 'col_4@country_2', 'col_5@country_2'), ]
     expected_df = spark.createDataFrame(expected_data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
     chispa.assert_df_equality(actual_df, expected_df)
 

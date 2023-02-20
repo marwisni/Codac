@@ -1,20 +1,7 @@
 from argparse import ArgumentParser
 from pyspark.sql import SparkSession
-from data_joiner import config, logger
+from data_joiner import config, logger, args
 
-
-def get_args():
-    parser = ArgumentParser()
-    parser.add_argument('source',
-                        nargs='*',
-                        default=[config.SOURCES['first'], config.SOURCES['second']],
-                        help='Needs two sources .csv files. First is for personal data and second for financial data.')
-    parser.add_argument('-c', '--country',
-                        default=config.SOURCES['countries'],
-                        help='Countries that should be included in output files. Empty list return all available countries')
-    return parser.parse_args()
-
-args = get_args()
 
 spark = SparkSession.builder.appName('codac').getOrCreate()
 logger.info('Spark session has started')

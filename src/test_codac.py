@@ -1,4 +1,4 @@
-"""Docstring for module, TODO Maybe add more tests?"""
+"""Test module for functions from tools.py module."""
 import chispa
 from pyspark.sql import SparkSession
 from data_joiner.tools import column_rename, country_filter

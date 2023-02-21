@@ -8,8 +8,8 @@ LOGS = {
 }
 
 SOURCES = {
-    'first': str(pathlib.Path(__file__).parents[1].joinpath('source_data/dataset_one.csv')),
-    'second': str(pathlib.Path(__file__).parents[1].joinpath('source_data/dataset_two.csv')),
+    'first': str(pathlib.Path(__file__).parent.joinpath('source_data/dataset_one.csv')),
+    'second': str(pathlib.Path(__file__).parent.joinpath('source_data/dataset_two.csv')),
     'countries': 'United Kingdom, Netherlands',
 }
 
@@ -19,4 +19,4 @@ CHANGES = {
     'cc_t':  'credit_card_type'
 }
 
-OUTPUT = str(pathlib.Path(__file__).parents[1].joinpath('client_data'))
+OUTPUT = str(pathlib.Path(__file__).parent.joinpath('client_data'))

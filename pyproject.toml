@@ -13,4 +13,5 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 [tool.setuptools.packages.find]
-exclude = ["test_*"]
+where="src"
+exclude = "test_*"

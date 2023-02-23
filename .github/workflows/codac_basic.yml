@@ -38,7 +38,7 @@ jobs:
         pytest
     - name: Build wheel file
       run: |
-        python setup.py bdist_wheel
+        python3 -m build
     - name: Checking wheel file
       run: |
         check-wheel-contents ./dist

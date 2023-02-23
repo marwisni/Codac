@@ -1,5 +1,5 @@
 setuptools 
-wheel
+build
 check-wheel-contents
 pyspark
 chispa

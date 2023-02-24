@@ -1,4 +1,4 @@
-# PySpark application to work with csv files
+# Codac PySpark assignment
 
 ## Description
 The goal of this application is to help very small company called **KommatiPara** that deals with bitcoin trading. Company has two separate datasets dealing with clients that they want to collate to starting interfacing more with their clients. One dataset contains information about the clients and the other one contains information about their financial details.
@@ -31,11 +31,12 @@ As the result of application work user will get one csv file with joined data fr
 </ol>
 
 ## Run
-To run application just type in terminal:  
-python3 codac.py *'personal_data_file_name.csv'* *'financial_data_file_name.csv'* *'country_1, country_2, ..., country_n'*  
+To run application just type in terminal:
+```python  
+python3 codac.py 'personal_data_file_name.csv' 'financial_data_file_name.csv' 'country_1, country_2, ..., country_n'
+```
 where:  
-- python3 is standard python command to run python3 script
-- codac.py is name of python script to run
+- codac.py is name of main application module to run
 - *'personal_data_file_name.csv'* is path to csv file contains clients personal data
 - *'financial_data_file_name.csv'* is path to csv file contains clients financial data
 - 'country_1, country_2, ..., country_n' is string with list of countries' names (comma separated) which user prefer to filter

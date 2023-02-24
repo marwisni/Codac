@@ -1,84 +1,42 @@
-"""Docstring for module"""
-import sys
-import logging
-import pathlib
-from logging.handlers import RotatingFileHandler
+"""Codac PySpark assignment. Main application module"""
+
 from pyspark.sql import SparkSession
+from data_joiner import config, tools, main_logger, args
 
-def logger_init(level, path, max_bytes, backup_count):
-    """Docstring"""    
-    pathlib.Path(__file__).parents[1].joinpath('logs').mkdir(exist_ok=True)
-    logger = logging.getLogger(__name__)
-    logger.setLevel(level)
-    logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-    logger_file_handler = RotatingFileHandler(
-        path, maxBytes=max_bytes, backupCount=backup_count, encoding='utf8')
-    logger_file_handler.setFormatter(logger_formatter)
-    logger.addHandler(logger_file_handler)
-    return logger
 
-logger = logger_init(level=logging.INFO,
-                     path="logs/status.log",
-                     max_bytes=1024,
-                     backup_count=3)
+# Starting sparksession
 spark = SparkSession.builder.appName('codac').getOrCreate()
-logger.info('Spark session has started')
+main_logger.info('Spark session has started')
 
-if len(sys.argv) > 1:
-    personal_data = spark.read.csv(sys.argv[1], header=True)
-else:
-    personal_data = spark.read.csv(
-        'src/source_data/dataset_one.csv', header=True)
-logger.info('Personal data has been imported successfully.')
-if len(sys.argv) > 2:
-    financial_data = spark.read.csv(sys.argv[2], header=True)
-else:
-    financial_data = spark.read.csv(
-        'src/source_data/dataset_two.csv', header=True)
-logger.info('Financial data has been imported successfully.')
+# Importing data from .csv files
+personal_data = spark.read.csv(str(args.source[0]), header=True)
+main_logger.info('Personal data has been imported successfully.')
+financial_data = spark.read.csv(args.source[1], header=True)
+main_logger.info('Financial data has been imported successfully.')
 
+# Removing personal identifiable information from the first dataset, excluding emails.
 personal_data = personal_data.select('id', 'email', 'country')
-logger.info('Personal data has been filtered successfully.')
+main_logger.info('Removed personal identifiable information from personal data successfully.')
 
+# Removing credit card number from second dataset.
 financial_data = financial_data.drop('cc_n')
-logger.info('Financial data has been filtered successfully.')
+main_logger.info('Removed credit card number from financial data successfully.')
 
+# Joining personal and financial data together.
 joined_data = personal_data.join(financial_data, ['id'])
-logger.info('Personal and financial data has been joined together successfully.')
+main_logger.info('Personal and financial data has been joined together successfully.')
 
+# Filtering results by country.
+joined_data = tools.country_filter(joined_data, args.country)
+main_logger.info('Data has been filtered by country successfully.')
 
-def country_filter(dataframe, countries_str: str):
-    """TODO Docstring for function"""
-    countries = [country.strip() for country in countries_str.split(',')]
-    logger.info('Data has been filtered by country successfully.')
-    return dataframe.filter(dataframe.country.isin(countries))
+# Renaming columns in results.
+joined_data = tools.column_rename(joined_data, config.CHANGES)
+main_logger.info("Columns' names have been changed successfully.")
 
+# Saving results to .csv file.
+joined_data.write.csv(config.OUTPUT, header=True, mode='overwrite')
+main_logger.info("Output file has been saved successfully.")
 
-if len(sys.argv) > 3:
-    joined_data = country_filter(joined_data, sys.argv[3])
-else:
-    joined_data = country_filter(joined_data, 'United Kingdom, Netherlands')
-
-changes = {
-    'id': 'client_identifier',
-    'btc_a': 'bitcoin_address',
-    'cc_t':  'credit_card_type'
-}
-
-
-def column_rename(dataframe, change: dict):
-    """TODO docstring for function, TODO Maybe should iterate by change not by colmns?"""
-    changes_list = []
-    for column in dataframe.columns:
-        if column in change.keys():
-            changes_list.append(f"{column} as {change[column]}")
-        else:
-            changes_list.append(column)
-    logger.info("Columns' names have been changed successfully.")
-    return dataframe.selectExpr(changes_list)
-
-
-joined_data = column_rename(joined_data, changes)
-joined_data.write.csv('src/client_data', header=True, mode='overwrite')
-logger.info("Output file has been saved successfully.")
+# Stopping spark session.
 spark.stop()

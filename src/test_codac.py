@@ -1,7 +1,7 @@
 """Test module for functions from tools.py module."""
 import chispa
 from pyspark.sql import SparkSession
-from data_joiner.tools import column_rename, country_filter
+from data_joiner.functions import column_rename, country_filter
 
 
 spark = SparkSession.builder.appName('test_codac').getOrCreate()

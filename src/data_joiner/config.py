@@ -19,10 +19,13 @@ SOURCES = {
     'countries': 'United Kingdom, Netherlands',
 }
 
-CHANGES = {
+RENAME = {
     'id': 'client_identifier',
     'btc_a': 'bitcoin_address',
     'cc_t':  'credit_card_type'
 }
 
+SELECT = ['id', 'email', 'country']
+DROP = ['cc_n']
+JOIN = ['id']
 OUTPUT = str(pathlib.Path(__file__).parent.joinpath('client_data'))

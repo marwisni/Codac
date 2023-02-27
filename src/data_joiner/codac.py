@@ -1,6 +1,5 @@
 """Codac PySpark assignment. Main application module"""
 
-from pyspark.sql import SparkSession
 from data_joiner import config, functions#, main_logger, args
 
 
@@ -9,44 +8,38 @@ logger = functions.logger_init(level=config.LOGS['level'],
                                     path=config.LOGS['path'],
                                     max_bytes=config.LOGS['maxBytes'],
                                     backup_count=config.LOGS['backupCount'])
-logger.info('Data joiner package has been initialized')
+# logger.info('Data joiner package has been initialized')
 
 # Getting arguments from command line and parsing it
-args = functions.get_args()
+args = functions.get_args(logger)
 
 # Starting sparksession
-spark = SparkSession.builder.appName('codac').getOrCreate()
-logger.info('Spark session has started')
+spark = functions.spark_init('codac', logger)
 
 # Importing data from .csv files
-personal_data = spark.read.csv(str(args.source[0]), header=True)
-logger.info('Personal data has been imported successfully.')
-financial_data = spark.read.csv(args.source[1], header=True)
-logger.info('Financial data has been imported successfully.')
+personal_data = functions.dataframe_import(spark, args.source[0], True, logger)
+financial_data = functions.dataframe_import(spark, args.source[1], True, logger)
 
 # Removing personal identifiable information from the first dataset, excluding emails.
-personal_data = personal_data.select('id', 'email', 'country')
-logger.info('Removed personal identifiable information from personal data successfully.')
+personal_data_trimmed = functions.columns_select(personal_data, config.SELECT, logger)
 
 # Removing credit card number from second dataset.
-financial_data = financial_data.drop('cc_n')
-logger.info('Removed credit card number from financial data successfully.')
+financial_data_trimmed = functions.columns_drop(financial_data, config.DROP, logger)
 
 # Joining personal and financial data together.
-joined_data = personal_data.join(financial_data, ['id'])
-logger.info('Personal and financial data has been joined together successfully.')
+joined_data = functions.dataframe_join(personal_data_trimmed,
+                                       financial_data_trimmed,
+                                       config.JOIN,
+                                       logger)
 
 # Filtering results by country.
-joined_data = functions.country_filter(joined_data, args.country)
-logger.info('Data has been filtered by country successfully.')
+joined_data_filtered = functions.country_filter(joined_data, args.country, logger)
 
 # Renaming columns in results.
-joined_data = functions.column_rename(joined_data, config.CHANGES)
-logger.info("Columns' names have been changed successfully.")
+joined_data_renamed = functions.columns_rename(joined_data_filtered, config.RENAME, logger)
 
 # Saving results to .csv file.
-joined_data.write.csv(config.OUTPUT, header=True, mode='overwrite')
-logger.info("Output file has been saved successfully.")
+functions.dataframe_save(joined_data_renamed, config.OUTPUT, True, logger)
 
 # Stopping spark session.
 spark.stop()

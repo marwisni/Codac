@@ -1,7 +1,7 @@
 """Test module for functions from tools.py module."""
 import chispa
 from pyspark.sql import SparkSession
-from data_joiner.functions import column_rename, country_filter
+from data_joiner.functions import columns_rename, country_filter
 
 
 spark = SparkSession.builder.appName('test_codac').getOrCreate()
@@ -11,7 +11,7 @@ def test_column_rename_happy_path():
     """Testing column_rename happy path"""
     data = [('abc', 'abc', 'abc', 'abc', 'abc')]
     source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
-    actual_df = column_rename(source_df, {
+    actual_df = columns_rename(source_df, {
         'a': 'f',
         'c': 'g',
         'e': 'd3'
@@ -25,7 +25,7 @@ def test_column_rename_column_not_in_df():
     """Testing column_rename when column which is wanted to change is not in dataframe"""
     data = [('abc', 'abc', 'abc', 'abc', 'abc')]
     source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
-    actual_df = column_rename(source_df, {
+    actual_df = columns_rename(source_df, {
         'z': 'f',
         'c': 'g',
         'e': 'd3'
@@ -39,7 +39,7 @@ def test_column_rename_with_empty_changes_dict():
     """Testing column_rename with empty changes dictionary"""
     data = [('abc', 'abc', 'abc', 'abc', 'abc')]
     source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
-    actual_df = column_rename(source_df, {})
+    actual_df = columns_rename(source_df, {})
     chispa.assert_df_equality(actual_df, source_df)
 
 

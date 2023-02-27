@@ -14,4 +14,4 @@ classifiers = [
 ]
 [tool.setuptools.packages.find]
 where=["src"]
-exclude = ["test_*"]
+# exclude = ["test_*"]

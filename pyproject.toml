@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "Codac"
-version = "0.6"
+version = "0.7"
 authors = [{ name="Mariusz Wiśniowski", email="mariusz.wisniowski@capgemini.com" }, ]
 description = "Codac PySpark Assignment. Upskilling task."
 readme = "README.md"
@@ -14,4 +14,4 @@ classifiers = [
 ]
 [tool.setuptools.packages.find]
 where=["src"]
-exclude = ["tests*"]
+exclude = ["tests"]

@@ -1,6 +1,6 @@
 """Codac PySpark assignment. Main application module"""
 
-from data_joiner import config, functions#, main_logger, args
+from data_joiner import config, functions
 
 
 # Initializing logging.

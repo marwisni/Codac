@@ -1,11 +1,13 @@
 """Test module for functions from tools.py module."""
+from logging import getLogger
 import chispa
 from pyspark.sql import SparkSession
 from data_joiner.functions import columns_rename, country_filter
 
 
 spark = SparkSession.builder.appName('test_codac').getOrCreate()
-
+logger = getLogger(__name__)
+    
 
 def test_column_rename_happy_path():
     """Testing column_rename happy path"""
@@ -15,7 +17,7 @@ def test_column_rename_happy_path():
         'a': 'f',
         'c': 'g',
         'e': 'd3'
-    }
+    }, logger
     )
     expected_df = spark.createDataFrame(data, ['f', 'b', 'g', 'd', 'd3'])
     chispa.assert_df_equality(actual_df, expected_df)
@@ -29,7 +31,7 @@ def test_column_rename_column_not_in_df():
         'z': 'f',
         'c': 'g',
         'e': 'd3'
-    }
+    }, logger
     )
     expected_df = spark.createDataFrame(data, ['a', 'b', 'g', 'd', 'd3'])
     chispa.assert_df_equality(actual_df, expected_df)
@@ -39,7 +41,7 @@ def test_column_rename_with_empty_changes_dict():
     """Testing column_rename with empty changes dictionary"""
     data = [('abc', 'abc', 'abc', 'abc', 'abc')]
     source_df = spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
-    actual_df = columns_rename(source_df, {})
+    actual_df = columns_rename(source_df, {}, logger)
     chispa.assert_df_equality(actual_df, source_df)
 
 
@@ -51,7 +53,7 @@ def test_country_filter_happy_path():
             ('col_1@country_4', 'col_2@country_4', 'country_4', 'col_4@country_4', 'col_5@country_4'),
             ('col_1@country_5', 'col_2@country_5', 'country_5', 'col_4@country_5', 'col_5@country_5')]
     source_df = spark.createDataFrame(data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
-    actual_df = country_filter(source_df, 'country_2, country_5')
+    actual_df = country_filter(source_df, 'country_2, country_5', logger)
     expected_data = [('col_1@country_2', 'col_2@country_2', 'country_2', 'col_4@country_2', 'col_5@country_2'),
                      ('col_1@country_5', 'col_2@country_5', 'country_5', 'col_4@country_5', 'col_5@country_5')]
     expected_df = spark.createDataFrame(expected_data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
@@ -66,7 +68,7 @@ def test_country_filter_country_not_in_df():
             ('col_1@country_4', 'col_2@country_4', 'country_4', 'col_4@country_4', 'col_5@country_4'),
             ('col_1@country_5', 'col_2@country_5', 'country_5', 'col_4@country_5', 'col_5@country_5')]
     source_df = spark.createDataFrame(data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
-    actual_df = country_filter(source_df, 'country_2, country_6')
+    actual_df = country_filter(source_df, 'country_2, country_6', logger)
     expected_data = [('col_1@country_2', 'col_2@country_2', 'country_2', 'col_4@country_2', 'col_5@country_2'), ]
     expected_df = spark.createDataFrame(expected_data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
     chispa.assert_df_equality(actual_df, expected_df)
@@ -80,5 +82,5 @@ def test_country_filter_empty_country_str():
             ('col_1@country_4', 'col_2@country_4', 'country_4', 'col_4@country_4', 'col_5@country_4'),
             ('col_1@country_5', 'col_2@country_5', 'country_5', 'col_4@country_5', 'col_5@country_5')]
     source_df = spark.createDataFrame(data, ['col_1', 'col_2', 'country', 'col_4', 'col_5'])
-    actual_df = country_filter(source_df, '')
+    actual_df = country_filter(source_df, '', logger)
     chispa.assert_df_equality(actual_df, source_df)

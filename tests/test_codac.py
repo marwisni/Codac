@@ -1,6 +1,6 @@
 """Test module for functions from functions.py module."""
 import chispa
-from data_joiner.functions import columns_rename, country_filter
+from src.data_joiner.functions import columns_rename, country_filter
 
 
 def test_column_rename_all_3_changes_should_be_done(source_df_5x1, expected_df_5x1_3chg, logger):

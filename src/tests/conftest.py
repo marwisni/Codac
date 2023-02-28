@@ -1,5 +1,5 @@
 """Test configuration file."""
-from logging import getLogger
+import logging
 from pyspark.sql import SparkSession
 from pytest import fixture
 
@@ -13,7 +13,19 @@ def fixture_spark():
 @fixture(name="logger", scope="session")
 def fixture_logger():
     """Initialization of test logger"""
-    return getLogger()
+    return logging.getLogger()
+
+
+@fixture(name="warn")
+def fixture_warn():
+    """Genarating logging.WARN constant for testing log_level_parser function"""
+    return logging.WARN
+
+
+@fixture(name="notset")
+def fixture_notset():
+    """Genarating logging.NOSET constant for testing log_level_parser function"""
+    return logging.NOTSET
 
 
 @fixture(name="source_df_5x1", scope="session")

@@ -7,7 +7,7 @@
 import pathlib
 
 LOGS = {
-    'level': 20,
+    'level': 'INFO',
     'path': pathlib.Path(__file__).parents[2].joinpath('logs'),
     'maxBytes': 1024,
     'backupCount': 3

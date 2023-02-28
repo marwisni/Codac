@@ -8,7 +8,7 @@ Functions:
     - country_filter(DataFrame, str) -> DataFrame
 """
 from sys import stdout
-from logging import getLogger, Formatter, StreamHandler
+import logging
 from logging.handlers import RotatingFileHandler
 from argparse import ArgumentParser
 from pyspark.sql import SparkSession
@@ -19,15 +19,15 @@ __docformat__ = 'restructuredtext'
 def logger_init(level, path, max_bytes, backup_count):
     """Logging initialization."""
     path.mkdir(exist_ok=True)
-    logger = getLogger(__name__)
+    logger = logging.getLogger(__name__)
     logger.setLevel(level)
-    logger_formatter = Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
+    logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
     logger_file_handler = RotatingFileHandler(path.joinpath('status.log'),
                                               maxBytes=max_bytes,
                                               backupCount=backup_count,
                                               encoding='utf8')
     logger_file_handler.setFormatter(logger_formatter)
-    logger_console_handler = StreamHandler(stdout)
+    logger_console_handler = logging.StreamHandler(stdout)
     logger_console_handler.setFormatter(logger_formatter)
     logger.addHandler(logger_file_handler)
     logger.addHandler(logger_console_handler)
@@ -62,6 +62,21 @@ def spark_init(name, logger):
     session = SparkSession.builder.appName(name).getOrCreate()
     logger.info('Spark session has started')
     return session
+
+
+def log_level_parser(level):
+    """Parsing custom logging levels for logging module."""
+    parser = {
+        'CRITICAL': logging.CRITICAL,
+        'ERROR': logging.ERROR,
+        'WARN': logging.WARN,
+        'INFO': logging.INFO,
+        'DEBUG': logging.DEBUG
+    }
+    try:
+        return parser[level]
+    except KeyError:
+        return logging.NOTSET
 
 
 def dataframe_import(spark_session, path, header, logger):

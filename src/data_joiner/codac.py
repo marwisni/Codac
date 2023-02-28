@@ -4,11 +4,10 @@ from data_joiner import config, functions
 
 
 # Initializing logging.
-logger = functions.logger_init(level=config.LOGS['level'],
+logger = functions.logger_init(level=functions.log_level_parser(config.LOGS['level']),
                                     path=config.LOGS['path'],
                                     max_bytes=config.LOGS['maxBytes'],
                                     backup_count=config.LOGS['backupCount'])
-# logger.info('Data joiner package has been initialized')
 
 # Getting arguments from command line and parsing it
 args = functions.get_args(logger)

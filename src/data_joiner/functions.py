@@ -9,6 +9,7 @@ Functions:
 """
 from sys import stdout
 import logging
+import pathlib
 from logging.handlers import RotatingFileHandler
 from argparse import ArgumentParser
 from pyspark.sql import SparkSession
@@ -18,11 +19,11 @@ __docformat__ = 'restructuredtext'
 
 def logger_init(level, path, max_bytes, backup_count):
     """Logging initialization."""
-    path.mkdir(exist_ok=True)
+    pathlib.Path(path).mkdir(exist_ok=True)
     logger = logging.getLogger(__name__)
     logger.setLevel(level)
     logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-    logger_file_handler = RotatingFileHandler(path.joinpath('status.log'),
+    logger_file_handler = RotatingFileHandler(pathlib.Path(path).joinpath('status.log'),
                                               maxBytes=max_bytes,
                                               backupCount=backup_count,
                                               encoding='utf8')
@@ -33,6 +34,13 @@ def logger_init(level, path, max_bytes, backup_count):
     logger.addHandler(logger_console_handler)
     logger.info('Logging has been initialized.')
     return logger
+
+def add_to_parent(path):
+    """
+    Return path to one level higher than location of script from which function
+    has been executed and adding 'path' argument to the end of it.
+    """
+    return str(pathlib.Path(__file__).parent.joinpath(path))
 
 
 def get_args(logger):
@@ -48,7 +56,7 @@ def get_args(logger):
     parser = ArgumentParser()
     parser.add_argument('source',
                         nargs='*',
-                        default=[config.SOURCES['first'], config.SOURCES['second']],
+                        default=[add_to_parent(config.SOURCES['first']), add_to_parent(config.SOURCES['second'])],
                         help='Needs two sources .csv files. First is for personal data and second for financial data.')
     parser.add_argument('-c', '--country',
                         default=config.SOURCES['countries'],

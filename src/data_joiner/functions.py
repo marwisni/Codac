@@ -131,7 +131,7 @@ def columns_drop(dataframe, drop, logger):
         Dataframe: DataFrame without dropped columns.
     """
     dataframe = dataframe.drop(*drop)
-    logger.info(f"Removed {', '.join(drop)} columns from the dataframe")
+    logger.info(f"Removed {', '.join(drop)} columns from the dataframe.")
     return dataframe
 
 def dataframe_join(dataframe1, dataframe2, join, logger):
@@ -147,7 +147,7 @@ def dataframe_join(dataframe1, dataframe2, join, logger):
         Dataframe: DataFrame including data from both sources dataframes.
     """
     dataframe = dataframe1.join(dataframe2, join)
-    logger.info('Dataframes has been joined together successfully.')
+    logger.info("Dataframes has been joined together successfully according to 'id' column.")
     return dataframe
 
 def columns_rename(dataframe, rename, logger):
@@ -167,7 +167,7 @@ def columns_rename(dataframe, rename, logger):
             changes_list.append(f"{column} as {rename[column]}")
         else:
             changes_list.append(column)
-    logger.info("Columns' names have been changed successfully.")
+    logger.info(f"Columns' names {*list(rename.keys()),} have been changed successfully.")
     return dataframe.selectExpr(changes_list)
 
 
@@ -183,9 +183,10 @@ def country_filter(dataframe, countries_str, logger):
         DataFrame: Dataframe with data only from countries included in the countries_str.
     """
     if countries_str == '':
+        logger.info('Data has not been filtered by country because empty string has been provided as parameter.')
         return dataframe
     countries_list = [country.strip() for country in countries_str.split(',')]
-    logger.info('Data has been filtered by country successfully.')
+    logger.info(f'Data has been filtered by country/countries ({countries_str}) successfully.')
     return dataframe.filter(dataframe.country.isin(countries_list))
 
 def dataframe_save(dataframe, path, header, logger):
@@ -198,5 +199,5 @@ def dataframe_save(dataframe, path, header, logger):
         - logger (Logger): Logger used to logging if function end with success.
     """
     dataframe.write.csv(path, header=header, mode='overwrite')
-    logger.info("Output file has been saved successfully.")
+    logger.info(f"Output file has been saved successfully to {path} directory.")
     return

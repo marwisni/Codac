@@ -4,6 +4,14 @@ from data_joiner import config, functions
 
 
 def main():
+    """Main function of the application. Things that will be done in the order:
+    - Initializing logging
+    - Parsing arguments from command line
+    - Starting Spark session
+    - Importing data from .csv files to Dataframes
+    - Transforming and joining Dataframes
+    - Saving results to output .csv file.
+    """
     # Initializing logging.
     logger = functions.logger_init(level=functions.log_level_parser(config.LOGS['level']),
                                         path=config.LOGS['path'],

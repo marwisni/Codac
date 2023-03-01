@@ -7,7 +7,7 @@
 LOGS = {
     'level': 'INFO',
     'path': './logs',
-    'maxBytes': 1024,
+    'maxBytes': 1024 * 2,
     'backupCount': 3
 }
 

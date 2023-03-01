@@ -9,6 +9,7 @@ Functions:
 """
 from sys import stdout
 import logging
+import pathlib
 from logging.handlers import RotatingFileHandler
 from argparse import ArgumentParser
 from pyspark.sql import SparkSession
@@ -18,11 +19,11 @@ __docformat__ = 'restructuredtext'
 
 def logger_init(level, path, max_bytes, backup_count):
     """Logging initialization."""
-    path.mkdir(exist_ok=True)
+    pathlib.Path(path).mkdir(exist_ok=True)
     logger = logging.getLogger(__name__)
     logger.setLevel(level)
     logger_formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
-    logger_file_handler = RotatingFileHandler(path.joinpath('status.log'),
+    logger_file_handler = RotatingFileHandler(pathlib.Path(path).joinpath('status.log'),
                                               maxBytes=max_bytes,
                                               backupCount=backup_count,
                                               encoding='utf8')
@@ -33,6 +34,13 @@ def logger_init(level, path, max_bytes, backup_count):
     logger.addHandler(logger_console_handler)
     logger.info('Logging has been initialized.')
     return logger
+
+def add_to_parent(path):
+    """
+    Return path to one level higher than location of script from which function
+    has been executed and adding 'path' argument to the end of it.
+    """
+    return str(pathlib.Path(__file__).parent.joinpath(path))
 
 
 def get_args(logger):
@@ -48,7 +56,7 @@ def get_args(logger):
     parser = ArgumentParser()
     parser.add_argument('source',
                         nargs='*',
-                        default=[config.SOURCES['first'], config.SOURCES['second']],
+                        default=[add_to_parent(config.SOURCES['first']), add_to_parent(config.SOURCES['second'])],
                         help='Needs two sources .csv files. First is for personal data and second for financial data.')
     parser.add_argument('-c', '--country',
                         default=config.SOURCES['countries'],
@@ -123,7 +131,7 @@ def columns_drop(dataframe, drop, logger):
         Dataframe: DataFrame without dropped columns.
     """
     dataframe = dataframe.drop(*drop)
-    logger.info(f"Removed {', '.join(drop)} columns from the dataframe")
+    logger.info(f"Removed {', '.join(drop)} columns from the dataframe.")
     return dataframe
 
 def dataframe_join(dataframe1, dataframe2, join, logger):
@@ -139,7 +147,7 @@ def dataframe_join(dataframe1, dataframe2, join, logger):
         Dataframe: DataFrame including data from both sources dataframes.
     """
     dataframe = dataframe1.join(dataframe2, join)
-    logger.info('Dataframes has been joined together successfully.')
+    logger.info("Dataframes has been joined together successfully according to 'id' column.")
     return dataframe
 
 def columns_rename(dataframe, rename, logger):
@@ -159,7 +167,7 @@ def columns_rename(dataframe, rename, logger):
             changes_list.append(f"{column} as {rename[column]}")
         else:
             changes_list.append(column)
-    logger.info("Columns' names have been changed successfully.")
+    logger.info(f"Columns' names {*list(rename.keys()),} have been changed successfully.")
     return dataframe.selectExpr(changes_list)
 
 
@@ -175,9 +183,10 @@ def country_filter(dataframe, countries_str, logger):
         DataFrame: Dataframe with data only from countries included in the countries_str.
     """
     if countries_str == '':
+        logger.info('Data has not been filtered by country because empty string has been provided as parameter.')
         return dataframe
     countries_list = [country.strip() for country in countries_str.split(',')]
-    logger.info('Data has been filtered by country successfully.')
+    logger.info(f'Data has been filtered by country/countries ({countries_str}) successfully.')
     return dataframe.filter(dataframe.country.isin(countries_list))
 
 def dataframe_save(dataframe, path, header, logger):
@@ -190,5 +199,5 @@ def dataframe_save(dataframe, path, header, logger):
         - logger (Logger): Logger used to logging if function end with success.
     """
     dataframe.write.csv(path, header=header, mode='overwrite')
-    logger.info("Output file has been saved successfully.")
+    logger.info(f"Output file has been saved successfully to {path} directory.")
     return

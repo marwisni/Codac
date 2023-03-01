@@ -4,18 +4,16 @@
     - CHANGES - dictionary for column name changes in schema "old: "new" (can be empty)
     - OUTPUT - path to output directory to save results.
 """
-import pathlib
-
 LOGS = {
     'level': 'INFO',
-    'path': pathlib.Path(__file__).parents[2].joinpath('logs'),
-    'maxBytes': 1024,
+    'path': './logs',
+    'maxBytes': 1024 * 2,
     'backupCount': 3
 }
 
 SOURCES = {
-    'first': str(pathlib.Path(__file__).parent.joinpath('source_data/dataset_one.csv')),
-    'second': str(pathlib.Path(__file__).parent.joinpath('source_data/dataset_two.csv')),
+    'first': 'source_data/dataset_one.csv',
+    'second': 'source_data/dataset_two.csv',
     'countries': 'United Kingdom, Netherlands',
 }
 
@@ -28,4 +26,4 @@ RENAME = {
 SELECT = ['id', 'email', 'country']
 DROP = ['cc_n']
 JOIN = ['id']
-OUTPUT = str(pathlib.Path(__file__).parent.joinpath('client_data'))
+OUTPUT = './client_data'

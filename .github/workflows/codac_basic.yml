@@ -13,14 +13,14 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build_and_tests:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.7
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: "3.7"
     - name: Install dependencies
@@ -42,3 +42,25 @@ jobs:
     - name: Checking wheel file
       run: |
         check-wheel-contents ./dist
+    -  name: Run
+      run: |
+        pip install dist/Codac-0.9.0-py3-none-any.whl
+        Codac        
+    - name: Archive wheel file
+      uses: actions/upload-artifact@v3
+      with:
+        name: wheel
+        path: |
+          dist          
+    - name: Archive client_data
+      uses: actions/upload-artifact@v3
+      with:
+        name: results
+        path: |          
+          client_data
+    - name: Archive logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: results
+        path: |          
+          logs

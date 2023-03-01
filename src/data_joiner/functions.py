@@ -35,13 +35,6 @@ def logger_init(level, path, max_bytes, backup_count):
     logger.info('Logging has been initialized.')
     return logger
 
-def add_to_parent(path):
-    """
-    Return path to one level higher than location of script from which function
-    has been executed and adding 'path' argument to the end of it.
-    """
-    return str(pathlib.Path(__file__).parent.joinpath(path))
-
 
 def get_args(logger):
     """Return parsed arguments for application. Provide --help option.
@@ -56,7 +49,7 @@ def get_args(logger):
     parser = ArgumentParser()
     parser.add_argument('source',
                         nargs='*',
-                        default=[add_to_parent(config.SOURCES['first']), add_to_parent(config.SOURCES['second'])],
+                        default=[config.SOURCES['first'], config.SOURCES['second']],
                         help='Needs two sources .csv files. First is for personal data and second for financial data.')
     parser.add_argument('-c', '--country',
                         default=config.SOURCES['countries'],

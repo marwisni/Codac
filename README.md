@@ -7,36 +7,50 @@ The company now needs a dataset containing the emails of the clients from the Un
 
 ## Input data
 User needs to provide two csv files:
-1) First with personal data which contains columns:  
-       a)  id  
-       b)  first_name  
-       c)  last_name  
-       d)  email  
-       e)  country  
+1) First with personal data which contains columns:
 
-2) Second with financial details:  
-       a)  id  
-       b)  btc_a (bitcoin address)  
-       c)  cc_t (credit card type)  
-       d)  cc_n (credit card number)
+|id|first_name|last_name|email|country|
+|---|---------|---------|-----|-------|
+
+2) Second with financial details:
+   
+|id|btc_a|cc_t|cc_n|
+|---|---------|---------|-----|
+
+      where:  
+       btc_a = bitcoin address  
+       cc_t = credit card type  
+       cc_n = credit card number
 
 ## Output (result)
 As the result of application work user will get one csv file with joined data from both inputed files. Output data will contains data only for chosen countries included in list which user will provide as parameter. Some columns' names will be also changed for better readability. Final file will contains columns:
-<ol type="a">
-        <li> client_identifier (previous 'id')  </li>
-        <li> email  </li>
-        <li> country  </li>
-        <li>  bitcoin_address  (previous 'btc_a')  </li>
-        <li> credit_card_type  (previous 'cc_t') </li>
-</ol>
+|client_identifier|email|country|bitcoin_address|credit_card_type|
+|---|---------|---------|-----|-------|
 
 ## Run
-To run application just type in terminal:
+After installation of package to run application use this command:
 ```python  
-python3 codac.py 'personal_data_file_name.csv' 'financial_data_file_name.csv' 'country_1, country_2, ..., country_n'
+Codac 'personal_data_file_name.csv' 'financial_data_file_name.csv' -c 'country_1, country_2, ..., country_n'
 ```
 where:  
-- codac.py is name of main application module to run
+- Codac is named entry point of application
 - *'personal_data_file_name.csv'* is path to csv file contains clients personal data
 - *'financial_data_file_name.csv'* is path to csv file contains clients financial data
 - 'country_1, country_2, ..., country_n' is string with list of countries' names (comma separated) which user prefer to filter
+
+All arguments are optional and if any of them is not provided then default parameters from config.py file will be used. Instead of *-c* option you can use long version: *--country*. So if:     
+a) config.py was not modified   
+b) you run application from directory where *source_data* with sample .csv files are stored  
+
+then these two run commands are equivalent:
+
+1.
+```python  
+Codac './source_data/dataset_one.csv' './source_data/dataset_two.csv' -c 'United Kingdom, Netherlands'
+```
+2.
+```python  
+Codac
+```
+
+because parameters used in option (1) are default and stored in config.py file.

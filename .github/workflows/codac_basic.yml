@@ -39,9 +39,10 @@ jobs:
     - name: Build wheel file
       run: |
         python3 -m build
-    - name: Run
-      run: |
-        Codac
     - name: Checking wheel file
       run: |
         check-wheel-contents ./dist
+    - name: Run
+      run: |
+        pip install dist/Codac-0.8.4-py3-none-any.whl
+        Codac

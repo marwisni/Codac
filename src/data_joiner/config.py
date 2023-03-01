@@ -12,8 +12,8 @@ LOGS = {
 }
 
 SOURCES = {
-    'first': 'source_data/dataset_one.csv',
-    'second': 'source_data/dataset_two.csv',
+    'first': './source_data/dataset_one.csv',
+    'second': './source_data/dataset_two.csv',
     'countries': 'United Kingdom, Netherlands',
 }
 

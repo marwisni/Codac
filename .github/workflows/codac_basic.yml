@@ -58,6 +58,9 @@ jobs:
         name: wheel
         path: |
           dist          
+    - name: Archive client_data
+      uses: actions/upload-artifact@v3
+      with:
         name: results
         path: |          
           client_data

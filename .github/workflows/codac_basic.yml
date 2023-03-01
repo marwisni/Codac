@@ -44,7 +44,8 @@ jobs:
         check-wheel-contents ./dist
     - name: Run
       run: |
+        ls
         pip install dist/Codac-0.8.4-py3-none-any.whl
         Codac
         ls
-        ls /client_data
+        ls client_data

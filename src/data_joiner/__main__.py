@@ -25,8 +25,8 @@ def main():
     spark = functions.spark_init('codac', logger)
 
     # Importing data from .csv files
-    personal_data = functions.dataframe_import(spark, args.source[0], True, logger)
-    financial_data = functions.dataframe_import(spark, args.source[1], True, logger)
+    personal_data = functions.dataframe_import(spark, args.personal, True, logger)
+    financial_data = functions.dataframe_import(spark, args.financial, True, logger)
 
     # Removing personal identifiable information from the first dataset, excluding emails.
     personal_data_trimmed = functions.columns_select(personal_data, config.SELECT, logger)

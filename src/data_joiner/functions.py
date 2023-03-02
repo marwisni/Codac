@@ -35,6 +35,10 @@ def logger_init(level, path, max_bytes, backup_count):
     logger.info('Logging has been initialized.')
     return logger
 
+def if_is_csv_file(path):
+    """Checking if provided path leads to .csv file"""
+    return pathlib.Path(path).is_file() and path[-3:] == 'csv'
+
 
 def get_args(logger):
     """Return parsed arguments for application. Provide --help option.
@@ -47,15 +51,24 @@ def get_args(logger):
         If any of this arguments was not provided then default from config.py file is used.
     """
     parser = ArgumentParser()
-    parser.add_argument('source',
-                        nargs='*',
-                        default=[config.SOURCES['first'], config.SOURCES['second']],
-                        help='Needs two sources .csv files. First is for personal data and second for financial data.')
+    parser.add_argument('-p', '--personal',
+                        default=config.SOURCES['first'],
+                        help='Path to .csv file which contains personal clients data.')
+    parser.add_argument('-f', '--financial',
+                        default=config.SOURCES['second'],
+                        help='Path to .csv file which contains financial clients data.')
     parser.add_argument('-c', '--country',
                         default=config.SOURCES['countries'],
                         help='Countries that should be included in output files. Empty list return all available countries')
+    args = parser.parse_args()
+    if not if_is_csv_file(args.personal):
+        logger.info('Provided path for .csv file with personal data is not valid. Default file will be used instead.')
+        args.personal=config.SOURCES['first']
+    if not if_is_csv_file(args.financial):
+        logger.info('Provided path for .csv file with financial data is not valid. Default file will be used instead.')
+        args.financial=config.SOURCES['second']
     logger.info('Arguments has been parsed successfully.')
-    return parser.parse_args()
+    return args
 
 
 def spark_init(name, logger):

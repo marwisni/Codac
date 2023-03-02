@@ -1,13 +1,13 @@
 exercise.md
-src/client_data/
 Codac.code-workspace
-src/logs/**
 .vscode/
 src/__pycache__
 build/
 *.egg-info/
 dist/
 src/venv/
-logs/**
 *.pyc
 .pylintrc
+*client_data*
+*logs*
+*empty*

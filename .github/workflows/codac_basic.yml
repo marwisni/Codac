@@ -42,19 +42,9 @@ jobs:
     - name: Checking wheel file
       run: |
         check-wheel-contents ./dist
-    - name: Run
-      run: |
-        pip install dist/Codac-0.9.1-py3-none-any.whl
-        Codac        
     - name: Archive dist
       uses: actions/upload-artifact@v3
       with:
         name: wheel
         path: |
-          dist
-    - name: Archive results
-      uses: actions/upload-artifact@v3
-      with:
-        name: results
-        path: |
-          client_data
+          dist    

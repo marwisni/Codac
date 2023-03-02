@@ -1,4 +1,5 @@
-"""Application configuration module.
+"""
+Application configuration module.
     - LOGS - here put data about your logging preferences.
     - SOURCES - here put paths for sources csv files and/or countries you would like to filter.
     - CHANGES - dictionary for column name changes in schema "old: "new" (can be empty)

@@ -42,7 +42,7 @@ jobs:
     - name: Checking wheel file
       run: |
         check-wheel-contents ./dist
-    -  name: Run
+    - name: Run
       run: |
         pip install dist/Codac-0.9.0-py3-none-any.whl
         Codac        

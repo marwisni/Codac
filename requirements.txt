@@ -1,7 +1,6 @@
 setuptools==61.0
 build==0.10.0
 check-wheel-contents==0.4.0
-# pylint == 2.15.10
 pyspark==3.3.1
 chispa==0.9.2
 flake8==5.0.4

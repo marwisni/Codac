@@ -38,9 +38,9 @@ where:
 - *'financial_data_file_name.csv'* is path to csv file contains clients financial data
 - 'country_1, country_2, ..., country_n' is string with list of countries' names (comma separated) which user prefer to filter
 
-All arguments are optional and if any of them is not provided then default parameters from config.py file will be used. Instead of *-p*, *-f*, *-c*  option you can use long versions: *--personal*, *--financial, *--country* appropriately. So if:    
-a) config.py was not modified   
-b) you run application from directory where *source_data* with sample .csv files are stored  
+All arguments are optional and if any of them is not provided then default parameters from config.py file will be used. Instead of *-p*, *-f*, *-c*  option you can use long versions: *--personal*, *--financial*, *--country* appropriately. So if:    
+- config.py was not modified   
+- you run application from directory where *source_data* with sample .csv files are stored  
 
 then these two run commands are equivalent:
 

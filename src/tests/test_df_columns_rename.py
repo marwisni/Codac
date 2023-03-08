@@ -5,6 +5,25 @@ from pytest import fixture
 from pyspark.sql import SparkSession, DataFrame
 from data_joiner.df import DF
 
+@fixture(name="source_df_5x1", scope="session")
+def fixture_source_df_5x1(spark):
+    """Generating source dummy DataFrame with 5 columns and 1 row"""
+    data = [('abc', 'abc', 'abc', 'abc', 'abc')]
+    return spark.createDataFrame(data, ['a', 'b', 'c', 'd', 'e'])
+
+@fixture(name="expected_df_5x1_3chg")
+def fixture_expected_df_5x1_3chg(spark):
+    """Generating expected dummy DataFrame with 5 columns and 1 row after 3 changes."""
+    data = [('abc', 'abc', 'abc', 'abc', 'abc')]
+    return spark.createDataFrame(data, ['f', 'b', 'g', 'd', 'd3'])
+
+
+@fixture(name="expected_df_5x1_2chg")
+def fixture_expected_df_5x1_2chg(spark):
+    """Generating expected dummy DataFrame with 5 columns and 1 row after 2 changes"""
+    data = [('abc', 'abc', 'abc', 'abc', 'abc')]
+    return spark.createDataFrame(data, ['a', 'b', 'g', 'd', 'd3'])
+
 
 @fixture(name="source_df_5x1_df")
 def fixture_source_df_5x1_df(spark: SparkSession, logger: Logger):

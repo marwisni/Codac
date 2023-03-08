@@ -1,7 +1,7 @@
 """Module containing DF class"""
 from logging import Logger
-from pyspark.sql import SparkSession, DataFrame
 from typing import List, Dict
+from pyspark.sql import SparkSession, DataFrame
 
 
 class DF:

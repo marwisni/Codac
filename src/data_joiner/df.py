@@ -7,9 +7,7 @@ from pyspark.sql import SparkSession, DataFrame
 class DF:
     """
     A class to represent a dataframe.
-
-    ...
-
+    
     Attributes
     ----------
     dataframe : DataFrame
@@ -49,7 +47,8 @@ class DF:
     def columns_select(self, select: List[str]) -> None:
         """Selecting particular columns from the dataframe.
 
-        Args:        
+        Args:
+        -----
             select (list[str]): List of columns names that should be selected.        
         """
         self.dataframe = self.dataframe.select(*select)
@@ -61,6 +60,7 @@ class DF:
         """Removing particular columns from the dataframe.
 
         Args:
+        -----
         drop (list[str]): List of columns names that should be removed.
         """
         self.dataframe = self.dataframe.drop(*drop)
@@ -71,7 +71,8 @@ class DF:
     def columns_rename(self, rename: Dict[str, str]) -> None:
         """Rename particular column names.
 
-        Args:    
+        Args:
+        -----
             rename (dict): Dictionary of changes that should happen in format "old_name": "new_name".        
         """
         changes_list = []
@@ -88,7 +89,8 @@ class DF:
     def country_filter(self, countries_str: str) -> None:
         """Filter data from dataframe including only particular countries.
 
-        Args:        
+        Args:
+        -----
             countries_str (str): Countries which should be included after filtering as comma separated string.        
         """
         if countries_str == '':
@@ -106,6 +108,7 @@ class DF:
         """Joining another dataframes.
 
         Args:
+        -----
             other (Dataframe): Second dataframe which should be joined with current one.
             on (list[str]): List of columns names that dataframes should be joined on.        
         """
@@ -118,6 +121,7 @@ class DF:
         """Saving results to .csv file.
 
         Args:
+        -----
             path (str): Path to the location where data should be saved.
             header (bool): Information if data should be saved with headers or not.        
         """

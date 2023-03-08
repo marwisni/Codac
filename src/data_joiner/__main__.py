@@ -25,7 +25,7 @@ def main():
     # Starting sparksession
     spark = functions.spark_init('codac', logger)
 
-    # Importing data from .csv files    
+    # Importing data from .csv files
     client_data = DF(spark, 'client_data', args.personal, logger)
     financial_data = DF(spark, 'financial_data', args.financial, logger)
 

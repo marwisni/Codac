@@ -109,7 +109,7 @@ class DF:
             other (Dataframe): Second dataframe which should be joined with current one.
             on (list[str]): List of columns names that dataframes should be joined on.        
         """
-        self.dataframe = self.dataframe.join(other, join_on)
+        self.dataframe = self.dataframe.join(other.dataframe, join_on)
         self.logger.info(
             f"Dataframe '{other.name}' has been joined to dataframe '{self.name}' according to '{join_on}' column(s).")
 

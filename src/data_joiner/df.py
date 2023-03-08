@@ -1,6 +1,7 @@
 """Module containing DF class"""
 from logging import Logger
 from pyspark.sql import SparkSession, DataFrame
+from typing import List, Dict
 
 
 class DF:
@@ -45,7 +46,7 @@ class DF:
                         " with provided DataFrame object because path to .csv file has not been provided.")
 
 
-    def columns_select(self, select: list[str]) -> None:
+    def columns_select(self, select: List[str]) -> None:
         """Selecting particular columns from the dataframe.
 
         Args:        
@@ -56,7 +57,7 @@ class DF:
             f"Only columns: {', '.join(select)} have been selected from dataframe '{self.name}'.")
 
 
-    def columns_drop(self, drop: list[str]) -> None:
+    def columns_drop(self, drop: List[str]) -> None:
         """Removing particular columns from the dataframe.
 
         Args:
@@ -67,7 +68,7 @@ class DF:
             f"Removed {', '.join(drop)} columns from the dataframe '{self.name}'.")
 
 
-    def columns_rename(self, rename: dict) -> None:
+    def columns_rename(self, rename: Dict[str, str]) -> None:
         """Rename particular column names.
 
         Args:    
@@ -101,7 +102,7 @@ class DF:
                 f"Data in the '{self.name}' dataframe has been filtered by country/countries: ({countries_str}).")
 
 
-    def join(self, other: 'DF', join_on: list[str]) -> None:
+    def join(self, other: 'DF', join_on: List[str]) -> None:
         """Joining another dataframes.
 
         Args:

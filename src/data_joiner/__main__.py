@@ -25,18 +25,14 @@ def main():
     # Starting sparksession
     spark = functions.spark_init('codac', logger)
 
-    # Importing data from .csv files
-    #personal_data = functions.dataframe_import(spark, args.personal, True, logger)
-    client_data = DF(spark, 'personal_data', args.personal, logger)
-    #financial_data = functions.dataframe_import(spark, args.financial, True, logger)
+    # Importing data from .csv files    
+    client_data = DF(spark, 'client_data', args.personal, logger)
     financial_data = DF(spark, 'financial_data', args.financial, logger)
 
     # Removing personal identifiable information from the first dataset, excluding emails.
-    #personal_data_trimmed = functions.columns_select(personal_data, config.SELECT, logger)
     client_data.columns_select(config.SELECT)
 
     # Removing credit card number from second dataset.
-    #financial_data_trimmed = functions.columns_drop(financial_data, config.DROP, logger)
     financial_data.columns_drop(config.DROP)
 
     # Joining personal and financial data together.

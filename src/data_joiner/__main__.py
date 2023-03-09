@@ -1,9 +1,10 @@
 """Codac PySpark assignment. Main application module"""
 
 from data_joiner import config, functions
+from data_joiner.df import DF
 
 
-def main():
+def main() -> None:
     """Main function of the application. Things that will be done in the order:
     - Initializing logging
     - Parsing arguments from command line
@@ -13,7 +14,7 @@ def main():
     - Saving results to output .csv file.
     """
     # Initializing logging.
-    logger = functions.logger_init(level=functions.log_level_parser(config.LOGS['level']),
+    logger = functions.init_logger(level=functions.parser_log_levels(config.LOGS['level']),
                                         path=config.LOGS['path'],
                                         max_bytes=config.LOGS['maxBytes'],
                                         backup_count=config.LOGS['backupCount'])
@@ -22,32 +23,29 @@ def main():
     args = functions.get_args(logger)
 
     # Starting sparksession
-    spark = functions.spark_init('codac', logger)
+    spark = functions.init_spark('codac', logger)
 
     # Importing data from .csv files
-    personal_data = functions.dataframe_import(spark, args.personal, True, logger)
-    financial_data = functions.dataframe_import(spark, args.financial, True, logger)
+    client_data = DF(spark, 'client_data', args.personal, logger)
+    financial_data = DF(spark, 'financial_data', args.financial, logger)
 
     # Removing personal identifiable information from the first dataset, excluding emails.
-    personal_data_trimmed = functions.columns_select(personal_data, config.SELECT, logger)
+    client_data.select_columns(config.SELECT)
 
     # Removing credit card number from second dataset.
-    financial_data_trimmed = functions.columns_drop(financial_data, config.DROP, logger)
+    financial_data.drop_columns(config.DROP)
 
     # Joining personal and financial data together.
-    joined_data = functions.dataframe_join(personal_data_trimmed,
-                                        financial_data_trimmed,
-                                        config.JOIN,
-                                        logger)
+    client_data.join(financial_data, config.JOIN)
 
     # Filtering results by country.
-    joined_data_filtered = functions.country_filter(joined_data, args.country, logger)
+    client_data.filter_countries(args.country)
 
     # Renaming columns in results.
-    joined_data_renamed = functions.columns_rename(joined_data_filtered, config.RENAME, logger)
+    client_data.rename_columns(config.RENAME)
 
     # Saving results to .csv file.
-    functions.dataframe_save(joined_data_renamed, config.OUTPUT, True, logger)
+    client_data.save(config.OUTPUT)
 
     # Stopping spark session.
     spark.stop()

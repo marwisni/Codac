@@ -3,6 +3,7 @@ from logging import Logger
 from typing import List, Dict
 from pyspark.sql import SparkSession, DataFrame
 
+__docformat__ = 'restructuredtext'
 
 class DF:
     """
@@ -30,21 +31,19 @@ class DF:
                  logger: Logger,
                  header: bool = True,
                  dataframe: DataFrame = None) -> None:
+        self.name = name
+        self.logger = logger
         if path:
             self.dataframe = spark_session.read.csv(path, header=header)
-            self.name = name
-            self.logger = logger
             logger.info(
                 f"Created DF object '{self.name}' with data imported from {path}.")
         else:
             self.dataframe = dataframe
-            self.name = name
-            self.logger = logger
             logger.info(f"Created DF object '{self.name}'"
                         " with provided DataFrame object because path to .csv file has not been provided.")
 
 
-    def columns_select(self, select: List[str]) -> None:
+    def select_columns(self, select: List[str]) -> None:
         """Selecting particular columns from the dataframe.
 
         Args:
@@ -56,7 +55,7 @@ class DF:
             f"Only columns: {', '.join(select)} have been selected from dataframe '{self.name}'.")
 
 
-    def columns_drop(self, drop: List[str]) -> None:
+    def drop_columns(self, drop: List[str]) -> None:
         """Removing particular columns from the dataframe.
 
         Args:
@@ -68,7 +67,7 @@ class DF:
             f"Removed {', '.join(drop)} columns from the dataframe '{self.name}'.")
 
 
-    def columns_rename(self, rename: Dict[str, str]) -> None:
+    def rename_columns(self, rename: Dict[str, str]) -> None:
         """Rename particular column names.
 
         Args:
@@ -86,7 +85,7 @@ class DF:
             f"Columns' names {*list(rename.keys()),} have been changed in dataframe '{self.name}'.")
 
 
-    def country_filter(self, countries_str: str) -> None:
+    def filter_countries(self, countries_str: str) -> None:
         """Filter data from dataframe including only particular countries.
 
         Args:
@@ -127,5 +126,4 @@ class DF:
         """
         self.dataframe.write.csv(path, header=header, mode='overwrite')
         self.logger.info(
-            f"Output file has been saved successfully to {path} directory.")
-        return
+            f"Output file has been saved successfully to {path} directory.")        

@@ -5,6 +5,7 @@ from pytest import fixture
 from pyspark.sql import SparkSession, DataFrame
 from data_joiner.df import DF
 
+__docformat__ = 'restructuredtext'
 
 @fixture(name="source_df_5x5", scope="session")
 def fixture_source_df_5x5(spark):
@@ -49,18 +50,18 @@ def fixture_source_df_5x5_df(spark: SparkSession, logger: Logger):
 
 def test_country_filter_leaves_specified_countries_in_results(source_df_5x5_df: DF, expected_df_5x2: DataFrame):
     """Testing country_filter when in Dataframe should stay only records from 2 specified countries"""
-    source_df_5x5_df.country_filter('country_2, country_5')
+    source_df_5x5_df.filter_countries('country_2, country_5')
     chispa.assert_df_equality(source_df_5x5_df.dataframe, expected_df_5x2)
 
 
 def test_country_filter_country_not_in_df(source_df_5x5_df: DF, expected_df_5x1_c: DataFrame):
     """Testing country_filter when one of the country expected to be filtered not exist in the dataframe."""
-    source_df_5x5_df.country_filter('country_2, country_6')
+    source_df_5x5_df.filter_countries('country_2, country_6')
     chispa.assert_df_equality(source_df_5x5_df.dataframe, expected_df_5x1_c)
 
 
 def test_country_filter_empty_country_str(source_df_5x5_df: DF, source_df_5x5: DataFrame):
     """Testing country_filter with empty country list - no change expected."""
     chispa.assert_df_equality(source_df_5x5_df.dataframe, source_df_5x5)
-    source_df_5x5_df.country_filter('')
+    source_df_5x5_df.filter_countries('')
     chispa.assert_df_equality(source_df_5x5_df.dataframe, source_df_5x5)

@@ -4,7 +4,7 @@ from data_joiner import config, functions
 from data_joiner.df import DF
 
 
-def main():
+def main() -> None:
     """Main function of the application. Things that will be done in the order:
     - Initializing logging
     - Parsing arguments from command line
@@ -14,7 +14,7 @@ def main():
     - Saving results to output .csv file.
     """
     # Initializing logging.
-    logger = functions.logger_init(level=functions.log_level_parser(config.LOGS['level']),
+    logger = functions.init_logger(level=functions.parser_log_levels(config.LOGS['level']),
                                         path=config.LOGS['path'],
                                         max_bytes=config.LOGS['maxBytes'],
                                         backup_count=config.LOGS['backupCount'])
@@ -23,26 +23,26 @@ def main():
     args = functions.get_args(logger)
 
     # Starting sparksession
-    spark = functions.spark_init('codac', logger)
+    spark = functions.init_spark('codac', logger)
 
     # Importing data from .csv files
     client_data = DF(spark, 'client_data', args.personal, logger)
     financial_data = DF(spark, 'financial_data', args.financial, logger)
 
     # Removing personal identifiable information from the first dataset, excluding emails.
-    client_data.columns_select(config.SELECT)
+    client_data.select_columns(config.SELECT)
 
     # Removing credit card number from second dataset.
-    financial_data.columns_drop(config.DROP)
+    financial_data.drop_columns(config.DROP)
 
     # Joining personal and financial data together.
     client_data.join(financial_data, config.JOIN)
 
     # Filtering results by country.
-    client_data.country_filter(args.country)
+    client_data.filter_countries(args.country)
 
     # Renaming columns in results.
-    client_data.columns_rename(config.RENAME)
+    client_data.rename_columns(config.RENAME)
 
     # Saving results to .csv file.
     client_data.save(config.OUTPUT)

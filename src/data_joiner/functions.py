@@ -9,6 +9,7 @@ Functions:
 """
 from sys import stdout
 import logging
+from typing import List
 import pathlib
 from logging.handlers import RotatingFileHandler
 from argparse import ArgumentParser
@@ -17,7 +18,7 @@ import data_joiner.config as config
 
 __docformat__ = 'restructuredtext'
 
-def logger_init(level: str, path: str, max_bytes: int, backup_count: int):
+def init_logger(level: str, path: str, max_bytes: int, backup_count: int) -> logging.Logger:
     """Logging initialization."""
     pathlib.Path(path).mkdir(exist_ok=True)
     logger = logging.getLogger(__name__)
@@ -35,12 +36,12 @@ def logger_init(level: str, path: str, max_bytes: int, backup_count: int):
     logger.info('Logging has been initialized.')
     return logger
 
-def if_is_csv_file(path: str):
+def if_is_csv_file(path: str) -> bool:
     """Checking if provided path leads to .csv file"""
     return pathlib.Path(path).is_file() and path[-3:] == 'csv'
 
 
-def get_args(logger: logging.Logger):
+def get_args(logger: logging.Logger) -> List[str]:
     """Return parsed arguments for application. Provide --help option.
 
     Returns:
@@ -72,14 +73,14 @@ def get_args(logger: logging.Logger):
     return args
 
 
-def spark_init(name: str, logger: logging.Logger):
+def init_spark(name: str, logger: logging.Logger) -> SparkSession:
     """Spark session initialization."""
     session = SparkSession.builder.appName(name).getOrCreate()
     logger.info('Spark session has started')
     return session
 
 
-def log_level_parser(level: str):
+def parser_log_levels(level: str) -> int:
     """Parsing custom logging levels for logging module."""
     parser = {
         'CRITICAL': logging.CRITICAL,
